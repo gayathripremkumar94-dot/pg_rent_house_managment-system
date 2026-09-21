@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Properties Bookings{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Bookings for My Properties</h3>
+                </div>
+                <div class="card-body">
+                    
+                    {% if bookings %}
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Booking ID</th>
+                                        <th>Property</th>
+                                        <th>Tenant</th>
+                                        <th>Move-in Date</th>
+                                        <th>Booking Date</th>
+                                        <th>Total Amount</th>
+                                        <th>Status</th>
+                                        <th>Payment Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for booking in bookings %}
+                                    <tr>
+                                        <td>#{{ booking.id }}</td>
+                                        <td>
+                                            <strong>{{ booking.property.title }}</strong><br>
+                                            <small class="text-muted">{{ booking.property.location }}</small>
+                                        </td>
+                                        <td>
+                                            {{ booking.user.get_full_name|default:booking.user.username }}<br>
+                                            <small class="text-muted">{{ booking.user.email }}</small>
+                                        </td>
+                                        <td>{{ booking.move_in_date|date:"M d, Y" }}</td>
+                                        <td>{{ booking.booking_date|date:"M d, Y H:i" }}</td>
+                                        <td>
+                                            <span class="font-weight-bold">${{ booking.total_amount }}</span>
+                                        </td>
+                                        <td>
+                                            {% if booking.status == 'Confirmed' %}
+                                                <span class="badge badge-success">Confirmed</span>
+                                            {% elif booking.status == 'Pending' %}
+                                                <span class="badge badge-warning">Pending</span>
+                                            {% elif booking.status == 'Cancelled' %}
+                                                <span class="badge badge-danger">Cancelled</span>
+                                            {% else %}
+                                                <span class="badge badge-secondary">{{ booking.status }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% with payment=booking.payment_set.first %}
+                                                {% if payment %}
+                                                    {% if payment.status == 'Completed' %}
+                                                        <span class="badge badge-success">Paid</span>
+                                                        <br>
+                                                        <small>${{ payment.amount }}</small>
+                                                    {% else %}
+                                                        <span class="badge badge-warning">{{ payment.status }}</span>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <span class="badge badge-secondary">Not Paid</span>
+                                                {% endif %}
+                                            {% endwith %}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a href="{% url 'booking_detail' booking.id %}" 
+                                                   class="btn btn-sm btn-info" 
+                                                   title="View Details">
+                                                    <i class="fas fa-eye"></i> View
+                                                </a>
+                                                {% if booking.status == 'Pending' %}
+                                                    <button type="button" 
+                                                            class="btn btn-sm btn-warning" 
+                                                            data-toggle="modal" 
+                                                            data-target="#updateStatusModal{{ booking.id }}"
+                                                            title="Update Status">
+                                                        <i class="fas fa-edit"></i> Update
+                                                    </button>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- Update Status Modal -->
+                                    {% if booking.status == 'Pending' %}
+                                    <div class="modal fade" id="updateStatusModal{{ booking.id }}" tabindex="-1" role="dialog">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Update Booking Status</h5>
+                                                    <button type="button" class="close" data-dismiss="modal">
+                                                        <span>&times;</span>
+                                                    </button>
+                                                </div>
+                                                <form method="post" action="{% url 'owner_update_booking_status' booking.id %}">
+                                                    {% csrf_token %}
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label>Current Status</label>
+                                                            <input type="text" class="form-control" value="{{ booking.status }}" readonly>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Update Status To</label>
+                                                            <select name="status" class="form-control" required>
+                                                                <option value="">Select Status</option>
+                                                                <option value="Confirmed">Confirm Booking</option>
+                                                                <option value="Cancelled">Cancel Booking</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="alert alert-info mt-2">
+                                                            <small>
+                                                                <i class="fas fa-info-circle"></i> 
+                                                                Confirming this booking will mark the property as unavailable.
+                                                            </small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-primary">Update Status</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Summary Cards -->
+                        <div class="row mt-4">
+                            <div class="col-md-3">
+                                <div class="card text-white bg-primary">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Total Bookings</h5>
+                                        <h2 class="mb-0">{{ bookings|length }}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-white bg-success">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Confirmed</h5>
+                                        <h2 class="mb-0">{{ bookings|length }}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-white bg-warning">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Pending</h5>
+                                        <h2 class="mb-0">{{ bookings|length }}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-white bg-info">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Total Revenue</h5>
+                                        <h2 class="mb-0">${{ total_revenue|default:"0" }}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    {% else %}
+                        <div class="alert alert-info text-center">
+                            <i class="fas fa-calendar-alt fa-3x mb-3"></i>
+                            <h4>No Bookings Yet</h4>
+                            <p>You don't have any bookings for your properties at the moment.</p>
+                            <a href="{% url 'property_list' %}" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Add More Properties
+                            </a>
+                        </div>
+                    {% endif %}
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .table th {
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+    .table td {
+        vertical-align: middle;
+        font-size: 0.9rem;
+    }
+    .badge {
+        font-size: 0.8rem;
+        padding: 5px 10px;
+    }
+    .card-header h3 {
+        font-size: 1.3rem;
+    }
+    .btn-group .btn {
+        margin: 0 2px;
+    }
+    @media (max-width: 768px) {
+        .table-responsive {
+            font-size: 0.8rem;
+        }
+        .btn-group .btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.7rem;
+        }
+    }
+</style>
+{% endblock %}

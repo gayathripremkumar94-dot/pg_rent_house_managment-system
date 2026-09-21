@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>RentFinder | Find Your Perfect Home — Premium Rentals & PG</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome 6 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts: Inter + Plus Jakarta Sans for modern elegance -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        h1, h2, h3, .font-display, .gradient-text, .brand-font {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        
+        /* premium gradient variants */
+        .gradient-bg {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+            background-size: 200% 200%;
+            transition: all 0.3s;
+        }
+        
+        .gradient-bg-dark {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 60%, #ec4899 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            background-size: 200% auto;
+            animation: gradientShift 5s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Hero section with glassmorphic + animated particles */
+        .hero-section {
+            position: relative;
+            background: radial-gradient(circle at 20% 30%, #4f46e5, #1e1b4b);
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDQwIDQwIj48cGF0aCBmaWxsPSIjZmZmZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDMiIGQ9Ik0yMCAzLjVDMTAuOSAzLjUgMy41IDEwLjkgMy41IDIwczcuNCAxNi41IDE2LjUgMTYuNVMzNi41IDI5LjEgMzYuNSAyMCAyOS4xIDMuNSAyMCAzLjV6bTAgMjhjLTYuMyAwLTExLjUtNS4yLTExLjUtMTEuNVMxMy43IDguNSAyMCA4LjVzMTEuNSA1LjIgMTEuNSAxMS41LTI5LjEgMjkuMS0zMiA3LjV6Ii8+PC9zdmc+');
+            background-repeat: repeat;
+            opacity: 0.2;
+            pointer-events: none;
+        }
+        
+        /* floating animation for decorative shapes */
+        .float-shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.35;
+            z-index: 0;
+            animation: floatSlow 18s infinite alternate;
+        }
+        
+        @keyframes floatSlow {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, -30px) scale(1.1); }
+        }
+        
+        /* modern property card with glassmorphism & depth */
+        .property-card {
+            transition: all 0.4s cubic-bezier(0.2, 0.85, 0.4, 1);
+            border-radius: 1.75rem;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(2px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.01);
+        }
+        
+        .property-card:hover {
+            transform: translateY(-12px) scale(1.01);
+            box-shadow: 0 30px 45px -18px rgba(99, 102, 241, 0.25), 0 0 0 1px rgba(99, 102, 241, 0.15);
+        }
+        
+        /* image hover zoom */
+        .img-hover-zoom {
+            transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+        
+        .group:hover .img-hover-zoom {
+            transform: scale(1.08);
+        }
+        
+        /* button primary premium */
+        .btn-premium {
+            background: linear-gradient(105deg, #4f46e5, #a855f7);
+            background-size: 200% auto;
+            transition: all 0.3s;
+            box-shadow: 0 8px 20px -6px rgba(79, 70, 229, 0.4);
+        }
+        
+        .btn-premium:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px -8px rgba(79, 70, 229, 0.6);
+            background-position: right center;
+        }
+        
+        .btn-outline-premium {
+            border: 1.5px solid rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(8px);
+            transition: all 0.25s;
+        }
+        
+        .btn-outline-premium:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* amenity tags */
+        .amenity-tag {
+            background: #f1f4ff;
+            transition: all 0.2s;
+        }
+        
+        .amenity-tag:hover {
+            background: #e0e7ff;
+            transform: translateY(-1px);
+        }
+        
+        /* animations */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(35px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-card {
+            animation: fadeUp 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+            opacity: 0;
+        }
+        
+        .delay-100 { animation-delay: 0.05s; }
+        .delay-200 { animation-delay: 0.1s; }
+        .delay-300 { animation-delay: 0.2s; }
+        .delay-400 { animation-delay: 0.3s; }
+        .delay-500 { animation-delay: 0.4s; }
+        .delay-600 { animation-delay: 0.5s; }
+        
+        /* custom scroll */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #818cf8, #a78bfa);
+            border-radius: 20px;
+        }
+        
+        .feature-card {
+            transition: all 0.3s;
+        }
+        .feature-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 25px -12px rgba(0,0,0,0.1);
+        }
+        
+        /* bg pattern */
+        .dot-pattern {
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 antialiased">
+
+<!-- floating blobs for richness -->
+<div class="float-shape w-96 h-96 bg-indigo-300 top-20 -left-40"></div>
+<div class="float-shape w-80 h-80 bg-purple-300 bottom-20 -right-40" style="animation-duration: 22s;"></div>
+<div class="float-shape w-72 h-72 bg-pink-300 top-1/3 left-1/2 opacity-20" style="animation-duration: 25s; filter: blur(70px);"></div>
+
+<!-- Hero Section - Immersive Redesign -->
+<div class="hero-section text-white py-24 px-4 relative overflow-hidden mb-16">
+    <div class="max-w-7xl mx-auto text-center relative z-20">
+        <div class="inline-flex items-center gap-2 mb-6 px-5 py-2 bg-white/20 backdrop-blur-md rounded-full border border-white/30 shadow-lg">
+            <i class="fas fa-crown text-yellow-300 text-sm"></i>
+            <span class="text-sm font-semibold tracking-wide">✨ 1,200+ Happy Tenants & Verified Hosts</span>
+        </div>
+        <h1 class="text-5xl md:text-7xl font-extrabold mb-6 leading-[1.2] tracking-tight">
+            Find Your <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-rose-200">Perfect Home</span>
+            <i class="fas fa-house-chimney text-amber-200 ml-2 text-5xl align-middle"></i>
+        </h1>
+        <p class="text-lg md:text-xl text-indigo-50 max-w-2xl mx-auto mb-10 leading-relaxed font-light">
+            Discover the best rental houses and PGs in your city with verified listings, flexible pricing, and zero brokerage.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-5 justify-center">
+            <a href="{% url 'property_list' %}" class="btn-premium bg-white text-gray-900 px-9 py-3.5 rounded-full font-bold inline-flex items-center justify-center gap-3 transition-all duration-300 shadow-2xl">
+                <i class="fas fa-arrow-right-to-bracket"></i> Browse Properties
+            </a>
+            <a href="#" class="btn-outline-premium border-2 border-white/40 px-9 py-3.5 rounded-full font-semibold inline-flex items-center justify-center gap-2 transition-all duration-300 hover:bg-white/10">
+                <i class="fas fa-headset"></i> Talk to Expert
+            </a>
+        </div>
+    </div>
+    
+    <!-- bottom wave separator -->
+    <div class="absolute bottom-0 left-0 right-0">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" fill="white" class="w-full h-auto opacity-90">
+            <path fill-opacity="1" d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,100L1360,100C1280,100,1120,100,960,100C800,100,640,100,480,100C320,100,160,100,80,100L0,100Z"></path>
+        </svg>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+    <!-- Section Header with elegant meta -->
+    <div class="text-center mb-14">
+        <div class="inline-flex items-center gap-2 bg-indigo-100/70 backdrop-blur-sm px-5 py-1.5 rounded-full mb-4 border border-indigo-200">
+            <i class="fas fa-fire-flame text-indigo-600 text-xs"></i>
+            <span class="text-indigo-700 text-sm font-bold tracking-wide">HOT PICKS 🔥</span>
+        </div>
+        <h2 class="text-4xl md:text-5xl font-extrabold text-slate-800 mb-4">
+            Recently Added <span class="gradient-text">Properties</span>
+        </h2>
+        <p class="text-gray-500 max-w-2xl mx-auto text-lg font-light">
+            Fresh listings from verified owners — move-in ready spaces designed for modern living.
+        </p>
+    </div>
+    
+    <!-- Property Grid - enhanced -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-9">
+        {% for property in recent_properties %}
+            <div class="property-card group bg-white/90 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg transition-all duration-300 animate-card 
+                {% if forloop.counter0 == 0 %}delay-100{% elif forloop.counter0 == 1 %}delay-200{% elif forloop.counter0 == 2 %}delay-300{% elif forloop.counter0 == 3 %}delay-400{% elif forloop.counter0 == 4 %}delay-500{% else %}delay-600{% endif %}">
+                
+                <!-- image container with overlay -->
+                <div class="relative h-56 overflow-hidden bg-gradient-to-br from-indigo-500 to-purple-600">
+                    {% if property.image %}
+                        <img src="{{ property.image.url }}" alt="{{ property.title }}" class="w-full h-full object-cover img-hover-zoom transition duration-700">
+                    {% else %}
+                        <div class="w-full h-full flex items-center justify-center bg-gradient-to-tr from-indigo-400 to-purple-500">
+                            <i class="fas fa-building text-7xl text-white/30 drop-shadow-lg"></i>
+                        </div>
+                    {% endif %}
+                    <!-- modern overlay gradient -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+                    
+                    <!-- price badge (elevated) -->
+                    <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-2xl shadow-md">
+                        <span class="text-lg font-black text-indigo-700">₹{{ property.price }}</span>
+                        <span class="text-xs text-gray-500">/mo</span>
+                    </div>
+                    
+                    <!-- property type badge left-top refined -->
+                    <div class="absolute bottom-4 left-4 flex gap-2">
+                        <div class="bg-black/50 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-semibold text-white shadow">
+                            <i class="fas fa-tag mr-1 text-indigo-200"></i> {{ property.property_type|default:"Premium Rental" }}
+                        </div>
+                        {% if property.is_available %}
+                            <div class="bg-emerald-500/90 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-bold text-white shadow-sm">
+                                <i class="fas fa-check-circle mr-1"></i> Available
+                            </div>
+                        {% else %}
+                            <div class="bg-rose-500/90 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-bold text-white">
+                                <i class="fas fa-lock"></i> Booked
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Card details polished -->
+                <div class="p-6">
+                    <div class="flex justify-between items-start gap-2 mb-1">
+                        <h3 class="text-xl font-extrabold text-slate-800 group-hover:text-indigo-600 transition line-clamp-1 tracking-tight">
+                            {{ property.title }}
+                        </h3>
+                    </div>
+                    
+                    <div class="flex items-center gap-1 text-gray-500 text-sm mb-3">
+                        <i class="fas fa-location-dot text-indigo-400 text-sm"></i>
+                        <span class="font-medium">{{ property.location }}, {{ property.city }}</span>
+                    </div>
+                    
+                    <p class="text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed">
+                        {{ property.description|truncatewords:18|default:"A beautiful property perfect for your needs. Thoughtfully designed space with modern amenities and prime location connectivity." }}
+                    </p>
+                    
+                    <!-- Amenities preview - dynamic yet refined -->
+                    <div class="flex flex-wrap gap-2 mb-5">
+                        <span class="amenity-tag bg-indigo-50 text-indigo-700 text-xs px-3 py-1.5 rounded-full font-medium flex items-center gap-1">
+                            <i class="fas fa-bed text-xs"></i> 2 Beds
+                        </span>
+                        <span class="amenity-tag bg-indigo-50 text-indigo-700 text-xs px-3 py-1.5 rounded-full font-medium flex items-center gap-1">
+                            <i class="fas fa-bath text-xs"></i> 2 Baths
+                        </span>
+                        <span class="amenity-tag bg-indigo-50 text-indigo-700 text-xs px-3 py-1.5 rounded-full font-medium flex items-center gap-1">
+                            <i class="fas fa-wifi"></i> Wi-Fi
+                        </span>
+                        <span class="amenity-tag bg-indigo-50 text-indigo-700 text-xs px-3 py-1.5 rounded-full font-medium flex items-center gap-1">
+                            <i class="fas fa-parking"></i> Parking
+                        </span>
+                    </div>
+                    
+                    <!-- action button premium -->
+                    <a href="{% url 'property_detail' property.id %}" class="inline-flex items-center justify-between w-full bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 text-slate-700 hover:text-indigo-700 font-bold py-3 px-5 rounded-xl transition-all duration-200 group/btn">
+                        <span>View full details <i class="fas fa-arrow-right ml-1 text-indigo-500 group-hover/btn:translate-x-1 inline-block transition"></i></span>
+                        <i class="fas fa-chevron-right text-indigo-500 opacity-70 group-hover/btn:opacity-100 transition-transform group-hover/btn:translate-x-1"></i>
+                    </a>
+                </div>
+            </div>
+        {% empty %}
+            <!-- Empty state with modern style -->
+            <div class="col-span-full text-center py-20 bg-white/60 backdrop-blur-sm rounded-3xl shadow-sm border border-gray-100">
+                <div class="w-24 h-24 mx-auto bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center mb-5 shadow-inner">
+                    <i class="fas fa-home text-5xl text-indigo-400"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-700 mb-2">No Properties Yet</h3>
+                <p class="text-gray-500 max-w-md mx-auto">New homes arriving soon — stay tuned for exclusive listings.</p>
+                <button class="mt-6 gradient-bg text-white px-6 py-2 rounded-full font-medium shadow-md hover:shadow-lg transition">Notify me</button>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <!-- View All Button with style -->
+    {% if recent_properties %}
+    <div class="text-center mt-14">
+        <a href="{% url 'property_list' %}" class="inline-flex items-center gap-3 px-8 py-3.5 bg-white border-2 border-indigo-200 text-indigo-700 rounded-full font-extrabold hover:bg-indigo-50 hover:border-indigo-400 transition-all duration-300 shadow-sm group/btn">
+            <span>Discover All Properties</span>
+            <i class="fas fa-arrow-right group-hover/btn:translate-x-1 transition-transform"></i>
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Features Section - elegant -->
+<div class="bg-white/50 backdrop-blur-sm py-20 mt-4 border-y border-indigo-100/60 dot-pattern">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-14">
+            <div class="inline-block px-4 py-1 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full text-indigo-700 text-xs font-bold mb-3">WHY US</div>
+            <h2 class="text-4xl font-black text-slate-800 mb-3">Why Choose <span class="gradient-text">RentFinder</span>?</h2>
+            <p class="text-gray-500 text-lg max-w-2xl mx-auto">Your trust, our priority — seamless rental journey from search to keys.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-9">
+            <div class="feature-card text-center p-7 rounded-2xl bg-white/70 shadow-sm hover:shadow-xl transition-all duration-300">
+                <div class="w-20 h-20 gradient-bg rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg">
+                    <i class="fas fa-shield-hart text-white text-3xl"></i>
+                </div>
+                <h3 class="text-xl font-extrabold mb-2 text-slate-800">Verified Listings</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">100% owner verification & property inspection for complete peace of mind.</p>
+            </div>
+            
+            <div class="feature-card text-center p-7 rounded-2xl bg-white/70 shadow-sm hover:shadow-xl transition-all duration-300">
+                <div class="w-20 h-20 gradient-bg rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg">
+                    <i class="fas fa-hand-holding-usd text-white text-3xl"></i>
+                </div>
+                <h3 class="text-xl font-extrabold mb-2 text-slate-800">Best Price Guarantee</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">Zero brokerage, fair deals & price match assurance — save more.</p>
+            </div>
+            
+            <div class="feature-card text-center p-7 rounded-2xl bg-white/70 shadow-sm hover:shadow-xl transition-all duration-300">
+                <div class="w-20 h-20 gradient-bg rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg">
+                    <i class="fas fa-headset text-white text-3xl"></i>
+                </div>
+                <h3 class="text-xl font-extrabold mb-2 text-slate-800">24/7 White Glove Support</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">Dedicated support team, live chat & instant resolution.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modern footer sleek -->
+<footer class="bg-slate-900 text-white pt-16 pb-8 mt-6 relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-6 mb-8">
+            <div class="flex items-center gap-2">
+                <div class="gradient-bg-dark p-2 rounded-xl shadow-lg">
+                    <i class="fas fa-building text-white text-xl"></i>
+                </div>
+                <span class="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-white to-indigo-200 bg-clip-text text-transparent">RentFinder</span>
+            </div>
+            <div class="flex gap-6">
+                <a href="#" class="text-gray-300 hover:text-white transition-all duration-200 hover:scale-110"><i class="fab fa-facebook-f text-lg"></i></a>
+                <a href="#" class="text-gray-300 hover:text-white transition-all duration-200 hover:scale-110"><i class="fab fa-twitter text-lg"></i></a>
+                <a href="#" class="text-gray-300 hover:text-white transition-all duration-200 hover:scale-110"><i class="fab fa-instagram text-lg"></i></a>
+                <a href="#" class="text-gray-300 hover:text-white transition-all duration-200 hover:scale-110"><i class="fab fa-linkedin-in text-lg"></i></a>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left border-t border-gray-800 pt-8">
+            <div>
+                <h4 class="font-bold text-white mb-3">Explore</h4>
+                <ul class="space-y-2 text-gray-400 text-sm">
+                    <li><a href="#" class="hover:text-white transition">About Us</a></li>
+                    <li><a href="#" class="hover:text-white transition">List your property</a></li>
+                    <li><a href="#" class="hover:text-white transition">Careers</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-white mb-3">Support</h4>
+                <ul class="space-y-2 text-gray-400 text-sm">
+                    <li><a href="#" class="hover:text-white transition">Help Center</a></li>
+                    <li><a href="#" class="hover:text-white transition">Safety Guide</a></li>
+                    <li><a href="#" class="hover:text-white transition">Contact Us</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-white mb-3">Legal</h4>
+                <ul class="space-y-2 text-gray-400 text-sm">
+                    <li><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
+                    <li><a href="#" class="hover:text-white transition">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-gray-800 mt-8 pt-6 text-center text-gray-500 text-xs">
+            <p>&copy; 2025 RentFinder — Seamless homefinding experience. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // dynamic stagger for cards if needed, plus subtle hover enhancements
+    document.addEventListener('DOMContentLoaded', function() {
+        // add extra polish: lazy blur effect
+        const cards = document.querySelectorAll('.property-card');
+        cards.forEach((card, idx) => {
+            card.style.animation = `fadeUp 0.5s ease forwards`;
+            card.style.animationDelay = `${idx * 0.05 + 0.05}s`;
+        });
+        
+        // smooth floating action for empty state if exists
+        const emptyIconDiv = document.querySelector('.col-span-full .w-24');
+        if(emptyIconDiv) {
+            setInterval(() => {
+                emptyIconDiv.style.transform = 'translateY(-5px)';
+                setTimeout(() => { if(emptyIconDiv) emptyIconDiv.style.transform = 'translateY(0px)'; }, 600);
+            }, 3000);
+        }
+        
+        // add sparkle effect to gradient text
+        const gradientSpans = document.querySelectorAll('.gradient-text');
+        gradientSpans.forEach(span => {
+            span.style.transition = 'all 0.2s';
+        });
+    });
+</script>
+
+</body>
+</html>

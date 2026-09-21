@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Images - {{ property.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Add Images for {{ property.title }}</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data" id="uploadForm">
+                        {% csrf_token %}
+                        
+                        <div class="form-group mb-4">
+                            <label for="images" class="form-label fw-bold">Select Images</label>
+                            <input type="file" 
+                                   name="images" 
+                                   id="images" 
+                                   class="form-control" 
+                                   multiple 
+                                   accept="image/*"
+                                   required>
+                            <small class="form-text text-muted">
+                                You can select multiple images at once. Supported formats: JPEG, PNG, GIF
+                            </small>
+                        </div>
+
+                        <!-- Image Preview Section -->
+                        <div id="imagePreview" class="row mb-4"></div>
+
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <button type="button" class="btn btn-info" id="addMoreBtn" style="display: none;">
+                                    <i class="fas fa-plus"></i> Add More Images
+                                </button>
+                            </div>
+                            <div>
+                                <a href="{% url 'property_detail' property.id %}" class="btn btn-secondary">
+                                    Cancel
+                                </a>
+                                <button type="submit" class="btn btn-primary" id="uploadBtn">
+                                    Upload Images
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Existing Images Section -->
+                    {% if property.images.all %}
+                    <hr class="my-4">
+                    <h4 class="mb-3">Existing Images</h4>
+                    <div class="row">
+                        {% for image in property.images.all %}
+                        <div class="col-md-3 mb-3">
+                            <div class="card">
+                                <img src="{{ image.image.url }}" 
+                                     class="card-img-top" 
+                                     alt="Property image"
+                                     style="height: 150px; object-fit: cover;">
+                                <div class="card-body p-2 text-center">
+                                    <form method="post" 
+                                          action="{% url 'delete_image' image.id %}" 
+                                          style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" 
+                                                class="btn btn-danger btn-sm"
+                                                onclick="return confirm('Delete this image?')">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Image preview functionality
+let selectedFiles = [];
+
+document.getElementById('images').addEventListener('change', function(e) {
+    const previewContainer = document.getElementById('imagePreview');
+    const addMoreBtn = document.getElementById('addMoreBtn');
+    
+    const files = Array.from(e.target.files);
+    selectedFiles = files;
+    
+    if (files.length > 0) {
+        addMoreBtn.style.display = 'block';
+    } else {
+        addMoreBtn.style.display = 'none';
+    }
+    
+    previewContainer.innerHTML = '';
+    
+    files.forEach((file, index) => {
+        if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            
+            const colDiv = document.createElement('div');
+            colDiv.className = 'col-md-3 mb-3';
+            
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'card';
+            
+            const img = document.createElement('img');
+            img.className = 'card-img-top';
+            img.style.height = '150px';
+            img.style.objectFit = 'cover';
+            
+            const cardBody = document.createElement('div');
+            cardBody.className = 'card-body p-2 text-center';
+            
+            const fileName = document.createElement('small');
+            fileName.className = 'text-muted';
+            fileName.textContent = file.name.length > 20 ? 
+                                  file.name.substring(0, 17) + '...' : 
+                                  file.name;
+            
+            cardBody.appendChild(fileName);
+            cardDiv.appendChild(img);
+            cardDiv.appendChild(cardBody);
+            colDiv.appendChild(cardDiv);
+            previewContainer.appendChild(colDiv);
+            
+            reader.onload = function(readerEvent) {
+                img.src = readerEvent.target.result;
+            };
+            
+            reader.readAsDataURL(file);
+        }
+    });
+});
+
+// Add More Images button functionality
+document.getElementById('addMoreBtn').addEventListener('click', function() {
+    document.getElementById('images').click();
+});
+
+// Preserve existing files when adding more
+document.getElementById('images').addEventListener('click', function(e) {
+    // This ensures the file input doesn't reset when adding more
+    e.stopPropagation();
+});
+</script>
+
+<style>
+    .card-img-top {
+        border-bottom: 1px solid #dee2e6;
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+        transition: transform 0.2s;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .btn-danger {
+        font-size: 12px;
+    }
+    
+    #imagePreview .card {
+        height: 100%;
+    }
+    
+    #addMoreBtn {
+        margin-right: 10px;
+    }
+</style>
+{% endblock %}
